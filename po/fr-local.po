@@ -289,6 +289,8 @@ msgid ""
 "WARNING: Gender conflict between Geneanet (%s) and Gramps (%s), keeping "
 "Gramps value"
 msgstr ""
+"ATTENTION: Conflit de genre entre Geneanet (%s) et Gramps (%s), la "
+"valeur de Gramps est conservée"
 
 #: GeneanetForGramps/GeneanetForGramps.py:421
 #, python-format
@@ -296,6 +298,8 @@ msgid ""
 "WARNING: Lastname conflict between Geneanet (%s) and Gramps (%s), keeping "
 "Gramps value"
 msgstr ""
+"ATTENTION: Conflit sur le nom entre Geneanet (%s) et Gramps (%s), la "
+"valeur de Gramps est conservée"
 
 #: GeneanetForGramps/GeneanetForGramps.py:427
 #, python-format
@@ -303,6 +307,8 @@ msgid ""
 "WARNING: Firstname conflict between Geneanet (%s) and Gramps (%s), keeping "
 "Gramps value"
 msgstr ""
+"ATTENTION: Conflit sur le prénom entre Geneanet (%s) et Gramps (%s), la "
+"valeur de Gramps est conservée"
 
 #: GeneanetForGramps/GeneanetForGramps.py:459
 #, python-format
@@ -594,7 +600,7 @@ msgstr "Né"
 
 #: GeneanetForGramps/GeneanetForGramps.py:1150
 msgid "birth"
-msgstr ""
+msgstr "naissance"
 
 #: GeneanetForGramps/GeneanetForGramps.py:1152
 msgid "Deceased"
@@ -703,11 +709,11 @@ msgstr " comparé à g_bd : "
 
 #: GeneanetForGramps/GeneanetForGramps.py:1387
 msgid "DEBUG: dd: "
-msgstr ""
+msgstr "DEBUG : dd : "
 
 #: GeneanetForGramps/GeneanetForGramps.py:1387
 msgid " vs g_dd: "
-msgstr ""
+msgstr "comparé à g_dd"
 
 #: GeneanetForGramps/GeneanetForGramps.py:1400
 msgid "Found a Gramps Person: "
@@ -843,12 +849,12 @@ msgstr "Individu Geneanets naissance/décès : %s / %s"
 
 #: GeneanetForGramps/GeneanetForGramps.py:1746
 msgid "Please fix the person in gramps"
-msgstr ""
+msgstr "Veuillez corriger l'individu dans Gramps"
 
 #: GeneanetForGramps/GeneanetForGramps.py:1752
 #, python-format
 msgid "Adding Gramps Person %s %s (%s | %s)"
-msgstr ""
+msgstr "Ajout de l'individu Gramps  %s %s (%s | %s)"
 
 #: GeneanetForGramps/GeneanetForGramps.py:1792
 msgid "Import Geneanet subtrees into Gramps"

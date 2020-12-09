@@ -468,6 +468,7 @@ class GBase:
         '''
         Create Place for Events or get an existing one based on the name
         '''
+
         try:
             pl = event.get_place_handle()
         except:
