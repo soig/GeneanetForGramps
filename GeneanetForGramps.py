@@ -1131,8 +1131,8 @@ class GPerson(GBase):
                     self.g_sex = 'U'
                 try:
                     name = tree.xpath('//div[@id="person-title"]//a/text()')
-                    self.g_firstname = str(name[0])
-                    self.g_lastname = str(name[1])
+                    self.g_firstname = str(name[0]).title()
+                    self.g_lastname = str(name[1]).title()
                 except:
                     self.g_firstname = ""
                     self.g_lastname = ""
@@ -1175,7 +1175,7 @@ class GPerson(GBase):
                 except:
                     self.g_birthdate = None
                 try:
-                    self.g_birthplace = str(' '.join(birth[0].split('-')[1:]).split(',')[0].strip())
+                    self.g_birthplace = str(' '.join(birth[0].split('-')[1:]).split(',')[0].strip()).title()
                     if verbosity >= 2:
                         print(_("Birth place:"), self.g_birthplace)
                 except:
@@ -1198,7 +1198,7 @@ class GPerson(GBase):
                 except:
                     self.g_deathdate = None
                 try:
-                    self.g_deathplace = str(' '.join(death[0].split('-')[1:]).split(',')[0]).strip()
+                    self.g_deathplace = str(' '.join(death[0].split('-')[1:]).split(',')[0]).strip().title()
                     if verbosity >= 2:
                         print(_("Death place:"), self.g_deathplace)
                 except:
@@ -1220,7 +1220,7 @@ class GPerson(GBase):
                 marriage = []
                 for spouse in spouses:
                     try:
-                        sname.append(str(spouse.xpath('a/text()')[0]))
+                        sname.append(str(spouse.xpath('a/text()')[0]).title())
                         if verbosity >= 2:
                             print(_("Spouse name:"), sname[s])
                     except:
@@ -1246,7 +1246,7 @@ class GPerson(GBase):
                     except:
                         self.marriagedate.append(None)
                     try:
-                        self.marriageplace.append(str(marriage[s].split(',')[1][1:]))
+                        self.marriageplace.append(str(marriage[s].split(',')[1][1:]).title())
                         if verbosity >= 2:
                             print(_("Married place:"), self.marriageplace[s])
                     except:
@@ -1267,7 +1267,7 @@ class GPerson(GBase):
                     clist = []
                     for c in spouse.xpath('ul/li'):
                         try:
-                            cname = c.xpath('a/text()')[0]
+                            cname = c.xpath('a/text()')[0].title()
                             if verbosity >= 2:
                                 print(_("Child %d name: %s")%(cnum,cname))
                         except:
@@ -1292,7 +1292,7 @@ class GPerson(GBase):
                         print(p.xpath('text()'))
                     if p.xpath('text()')[0] == '\n':
                         try:
-                            pname = p.xpath('a/text()')[0]
+                            pname = p.xpath('a/text()')[0].title()
                         except:
                             pname = ""
                             # if pname is ? ? then go to next one
