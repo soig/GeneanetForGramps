@@ -1159,7 +1159,7 @@ class GPerson(GBase):
                 if verbosity >= 3:
                     print(_("death")+": %s"%(death))
                 try:
-                    # sometime parents are using circle, somtimes disc !
+                    # sometime parents are using circle, sometimes disc !
                     parents = tree.xpath('//ul[not(descendant-or-self::*[@class="fiche_union"])]//li[@style="vertical-align:middle;list-style-type:disc" or @style="vertical-align:middle;list-style-type:circle"]')
                 except:
                     parents = []

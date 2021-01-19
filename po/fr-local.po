@@ -416,7 +416,7 @@ msgstr "Date trouvée (2):"
 
 #: GeneanetForGramps/GeneanetForGramps.py:696
 msgid "Returned date: "
-msgstr "Date retournée"
+msgstr "Date retournée :"
 
 #: GeneanetForGramps/GeneanetForGramps.py:725
 msgid "Creating GFamily: "
