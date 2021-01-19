@@ -1291,15 +1291,21 @@ class GPerson(GBase):
                     if verbosity >= 3:
                         print(p.xpath('text()'))
                     if p.xpath('text()')[0] == '\n':
-                        try:
-                            pname = p.xpath('a/text()')[0].title()
-                        except:
-                            pname = ""
-                            # if pname is ? ? then go to next one
-                        try:
-                            pref = p.xpath('a/attribute::href')[0]
-                        except:
-                            pref = ""
+                        for a in p.xpath('a'):
+                            sosa = a.find('img')
+                            if sosa is None:
+                                try:
+                                    pname = a.xpath('text()')[0].title()
+                                except:
+                                    pname = ""
+                                    # if pname is ? ? then go to next one
+                                try:
+                                    pref = a.xpath('attribute::href')[0]
+                                except:
+                                    pref = ""
+                            else:
+                                print("Found SOSA")
+
                         if verbosity >= 1:
                            print(_("Parent name: %s (%s)")%(pname,ROOTURL+pref))
                         prefl.append(ROOTURL+str(pref))
