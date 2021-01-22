@@ -1219,19 +1219,22 @@ class GPerson(GBase):
                 sref = []
                 marriage = []
                 for spouse in spouses:
-                    try:
-                        sname.append(str(spouse.xpath('a/text()')[0]).title())
-                        if verbosity >= 2:
-                            print(_("Spouse name:"), sname[s])
-                    except:
-                        sname.append("")
+                    for a in spouse.xpath('a'):
+                        sosa = a.find('img')
+                        if sosa is None:
+                            try:
+                                sname.append(str(a.xpath('text()')[0]).title())
+                                if verbosity >= 2:
+                                    print(_("Spouse name:"), sname[s])
+                            except:
+                                sname.append("")
+                            try:
+                                sref.append(str(a.xpath('attribute::href')[0]))
+                                if verbosity >= 2:
+                                    print(_("Spouse ref:"), ROOTURL+sref[s])
+                            except:
+                                sref.append("")
 
-                    try:
-                        sref.append(str(spouse.xpath('a/attribute::href')[0]))
-                        if verbosity >= 2:
-                            print(_("Spouse ref:"), ROOTURL+sref[s])
-                    except:
-                        sref.append("")
                     self.spouseref.append(ROOTURL+sref[s])
 
                     try:
@@ -1266,18 +1269,22 @@ class GPerson(GBase):
                     cnum = 0
                     clist = []
                     for c in spouse.xpath('ul/li'):
-                        try:
-                            cname = c.xpath('a/text()')[0].title()
-                            if verbosity >= 2:
-                                print(_("Child %d name: %s")%(cnum,cname))
-                        except:
-                            cname = None
-                        try:
-                            cref = ROOTURL+str(c.xpath('a/attribute::href')[0])
-                            if verbosity >= 2:
-                                print(_("Child %d ref: %s")%(cnum,cref))
-                        except:
-                            cref = None
+                        for a in c.xpath('a'):
+                            sosa = a.find('img')
+                            if sosa is None:
+                                try:
+                                    cname = c.xpath('a/text()')[0].title()
+                                    if verbosity >= 2:
+                                        print(_("Child %d name: %s")%(cnum,cname))
+                                except:
+                                    cname = ""
+                                try:
+                                    cref = ROOTURL+str(a.xpath('attribute::href')[0])
+                                    if verbosity >= 2:
+                                        print(_("Child %d ref: %s")%(cnum,cref))
+                                except:
+                                    cref = None
+
                         clist.append(cref)
                         cnum = cnum + 1
                     self.childref.append(clist)
@@ -1303,8 +1310,6 @@ class GPerson(GBase):
                                     pref = a.xpath('attribute::href')[0]
                                 except:
                                     pref = ""
-                            else:
-                                print("Found SOSA")
 
                         if verbosity >= 1:
                            print(_("Parent name: %s (%s)")%(pname,ROOTURL+pref))
