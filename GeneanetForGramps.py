@@ -2,7 +2,7 @@
 #
 # GeneanetForGramps
 #
-# Copyright (C) 2020  Bruno Cornec
+# Copyright (C) 2020-2021  Bruno Cornec
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the Affero GNU General Public License as published by
@@ -1104,7 +1104,7 @@ class GPerson(GBase):
             if verbosity >= 1:
                 print("-----------------------------------------------------------")
                 print(_("Page considered:"),purl)
-            page = requests.get(purl)
+            page = requests.get(purl,headers=headers)
             if verbosity >= 3:
                 print(_("Return code:"),page.status_code)
         except:
