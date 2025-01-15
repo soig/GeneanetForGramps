@@ -596,7 +596,11 @@ class GBase:
                 # ISO string, put in a tuple, reversed
                 tab = string.split('-')
                 if len(tab) == 3:
-                    date.set_yr_mon_day(int(tab[0]),int(tab[1]),int(tab[2]))
+                    try:
+                        date.set_yr_mon_day(int(tab[0]),int(tab[1]),int(tab[2]))
+                    #except gramps.gen.errors.DateError as x:
+                    except Exception as x:
+                        print(_("ERROR: set_yr_mon_day(%s,%s,%s) failed: %s"), int(tab[0]), int(tab[1]), int(tab[2]), x)
                 elif len(tab) == 2:
                     date.set_yr_mon_day(int(tab[0]),int(tab[1]),0)
                 elif len(tab) == 1:
