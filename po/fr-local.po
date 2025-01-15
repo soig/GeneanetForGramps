@@ -603,6 +603,10 @@ msgid "birth"
 msgstr "naissance"
 
 #: GeneanetForGramps/GeneanetForGramps.py:1152
+msgid "Baptized"
+msgstr "Baptisé"
+
+#: GeneanetForGramps/GeneanetForGramps.py:1152
 msgid "Deceased"
 msgstr "Décédé"
 
@@ -614,6 +618,11 @@ msgstr "décès"
 #: GeneanetForGramps/GeneanetForGramps.py:1516
 msgid "Birth:"
 msgstr "Naissance :"
+
+#: GeneanetForGramps/GeneanetForGramps.py:1172
+#: GeneanetForGramps/GeneanetForGramps.py:1516
+msgid "Baptism:"
+msgstr "Baptême :"
 
 #: GeneanetForGramps/GeneanetForGramps.py:1179
 msgid "Birth place:"
@@ -746,6 +755,11 @@ msgstr "Pas de date de naissance"
 #, python-format
 msgid "WARNING: Unable to retrieve birth date for id %s"
 msgstr "ATTENTION : impossible de récupérer la date de naissance pour l'id %s"
+
+#: GeneanetForGramps/GeneanetForGramps.py:1520
+msgid "No Baptism date"
+msgstr "Pas de date de baptême"
+
 
 #: GeneanetForGramps/GeneanetForGramps.py:1533
 msgid "No Death date"

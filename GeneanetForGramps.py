@@ -172,7 +172,7 @@ def format_noniso(date_tuple):
     return(format_iso(year, month, day))
 
 def convert_date(datetab):
-    ''' Convert the Geneanet date format for birth/death/married lines
+    ''' Convert the Geneanet date format for birth/baptism/death/married lines
     into an ISO date format
     '''
 
@@ -647,6 +647,9 @@ class GBase:
 
         if evttype == EventType.BIRTH:
             ref = self.grampsp.get_birth_ref()
+        # FIXME: there's no self.grampsp.get_*_ref for EventType.BAPTISM: => shall we try to use get_event_ref() ?
+        #elif evttype == EventType.BAPTISM:
+        #    ref = self.grampsp.get_bapt()
         elif evttype == EventType.DEATH:
             ref = self.grampsp.get_death_ref()
         elif evttype == EventType.MARRIAGE:
@@ -1037,6 +1040,9 @@ class GPerson(GBase):
         self.birthdate = None
         self.birthplace = None
         self.birthplacecode = None
+        self.baptismdate = None
+        self.baptismplace = None
+        self.baptismplacecode = None
         self.deathdate = None
         self.deathplace = None
         self.deathplacecode = None
@@ -1055,6 +1061,9 @@ class GPerson(GBase):
         self.g_birthdate = None
         self.g_birthplace = None
         self.g_birthplacecode = None
+        self.g_baptismdate = None
+        self.g_baptismplace = None
+        self.g_baptismplacecode = None
         self.g_deathdate = None
         self.g_deathplace = None
         self.g_deathplacecode = None
@@ -1079,6 +1088,9 @@ class GPerson(GBase):
         self._smartcopy("birthdate")
         self._smartcopy("birthplace")
         self._smartcopy("birthplacecode")
+        self._smartcopy("baptismdate")
+        self._smartcopy("baptismplace")
+        self._smartcopy("baptismplacecode")
         self._smartcopy("deathdate")
         self._smartcopy("deathplace")
         self._smartcopy("deathplacecode")
@@ -1161,6 +1173,7 @@ class GPerson(GBase):
                     print(_("==> GENEANET Name (L%d): %s %s")%(self.level,self.g_firstname,self.g_lastname))
                 if verbosity >= 2:
                     print(_("Sex:"), self.g_sex)
+                # Extract Birth:
                 try:
                     sstring = '//li[contains(., "'+_("Born")+'")]/text()'
                     if verbosity >= 3:
@@ -1170,6 +1183,18 @@ class GPerson(GBase):
                     birth = [""]
                 if verbosity >= 3:
                     print(_("birth")+": %s"%(birth))
+                # Extract Baptism:
+                try:
+                    print(">>Baptized: ", _("Baptized"))
+                    sstring = '//li[contains(., "'+_("Baptized")+'")]/text()'
+                    if verbosity >= 3:
+                        print("sstring: "+sstring)
+                    baptism = tree.xpath(sstring)
+                except:
+                    baptism = [""]
+                if verbosity >= 3:
+                    print(_("baptism")+": %s"%(baptism))
+                # Extract Death:
                 try:
                     sstring = '//li[contains(., "'+_("Deceased")+'")]/text()'
                     if verbosity >= 3:
@@ -1188,6 +1213,8 @@ class GPerson(GBase):
                     spouses = tree.xpath('//ul[@class="fiche_union"]/li')
                 except:
                     spouses = []
+                # TODO: Birth, Baptism, Death (& later Burial should probably just be in a loop)
+                # Process Birth:
                 try:
                     ld = convert_date(birth[0].split('-')[0].split()[1:])
                     if verbosity >= 2:
@@ -1211,6 +1238,31 @@ class GPerson(GBase):
                             print(_("Birth place code:"), self.g_birthplacecode)
                 except:
                     self.g_birthplacecode = None
+                # Process Baptism:
+                try:
+                    ld = convert_date(baptism[0].split('-')[0].split()[1:])
+                    if verbosity >= 2:
+                        print(_("Baptism:"), ld)
+                    self.g_baptismdate = format_ca(ld)
+                except:
+                    self.g_baptismdate = None
+                try:
+                    self.g_baptismplace = str(' '.join(baptism[0].split('-')[1:]).split(',')[0].strip()).title()
+                    if verbosity >= 2:
+                        print(_("Baptism place:"), self.g_baptismplace)
+                except:
+                    self.g_baptismplace = None
+                try:
+                    self.g_baptismplacecode = str(' '.join(baptism[0].split('-')[1:]).split(',')[1]).strip()
+                    match = re.search(r'\d\d\d\d\d', self.g_baptismplacecode)
+                    if not match:
+                        self.g_baptismplacecode = None
+                    else:
+                        if verbosity >= 2:
+                            print(_("Baptism place code:"), self.g_baptismplacecode)
+                except:
+                    self.g_baptismplacecode = None
+                # Process Death:
                 try:
                     ld = convert_date(death[0].split('-')[0].split()[1:])
                     if verbosity >= 2:
@@ -1395,6 +1447,8 @@ class GPerson(GBase):
             bd = self.get_gramps_date(EventType.BIRTH)
             # Remove empty month/day if needed to compare below with just a year potentially
             bd = format_year(bd)
+            bapd = self.get_gramps_date(EventType.BAPTISM)
+            bapd = format_year(bapd)
             dd = self.get_gramps_date(EventType.DEATH)
             dd = format_year(dd)
             if verbosity >= 3:
@@ -1404,6 +1458,10 @@ class GPerson(GBase):
                     pbd = "None"
                 else:
                     pbd = bd
+                if not bapd:
+                    pbapd = "None"
+                else:
+                    pbapd = bapd
                 if not dd:
                     pdd = "None"
                 else:
@@ -1412,22 +1470,28 @@ class GPerson(GBase):
                     g_pbd = "None"
                 else:
                     g_pbd = self.g_birthdate
+                if not self.g_baptismdate:
+                    g_papd = "None"
+                else:
+                    g_papd = self.g_baptismdate
                 if not self.g_deathdate:
                     g_pdd = "None"
                 else:
                     g_pdd = self.g_deathdate
                 print(_("DEBUG: bd: ")+pbd+_(" vs g_bd: ")+g_pbd)
+                print(_("DEBUG: bapd: ")+pbd+_(" vs g_baptd: ")+g_pbd)
                 print(_("DEBUG: dd: ")+pdd+_(" vs g_dd: ")+g_pdd)
             if firstname != self.g_firstname or lastname != self.g_lastname:
                 # it's not the right person finally
                 self.grampsp = None
                 continue
+            # TODO: consider baptism & buried dates too?
             if not bd and not dd and not self.g_birthdate and not self.g_deathdate:
                 # we skip a person for which we have no date at all
                 # this may create duplicates, but is the best apparoach
                 self.grampsp = None
                 continue
-            if bd == self.g_birthdate or dd == self.g_deathdate:
+            if bd == self.g_birthdate or dd == self.g_deathdate or bapd == self.g_baptismdate:
                 self.gid = p.gramps_id
                 if verbosity >= 2:
                     print(_("Found a Gramps Person: ")+self.g_firstname+' '+self.g_lastname+ " ("+self.gid+")")
@@ -1468,6 +1532,7 @@ class GPerson(GBase):
             grampsp.set_primary_name(n)
 
             # We need to create events for Birth and Death
+            # (Not Baptism/Burial since we don't have eg: 'get_baptism_ref')
             for ev in ['birth', 'death']:
                 self.get_or_create_event(grampsp,ev,tran)
 
@@ -1554,6 +1619,19 @@ class GPerson(GBase):
         except:
             if verbosity >= 1:
                 print(_("WARNING: Unable to retrieve birth date for id %s")%(self.gid))
+
+        try:
+            dd = self.get_gramps_date(EventType.BAPTISM)
+            if dd:
+                if verbosity >= 2:
+                    print(_("Baptism:"),dd)
+                self.baptismdate= dd
+            else:
+                if verbosity >= 2:
+                    print(_("No Baptism date"))
+        except:
+            if verbosity >= 1:
+                print(_("WARNING: Unable to retrieve baptism date for id %s")%(self.gid))
 
         try:
             dd = self.get_gramps_date(EventType.DEATH)
@@ -1762,16 +1840,20 @@ def geneanet_to_gramps(p, level, gid, url):
             p.g_birthdate = None
         if p.birthdate == "":
             p.birthdate = None
+        if p.g_baptismdate == "":
+            p.g_baptismdate = None
+        if p.baptismdate == "":
+            p.baptismdate = None
         if p.g_deathdate == "":
             p.g_deathdate = None
         if p.deathdate == "":
             p.deathdate = None
 
-        if p.birthdate == p.g_birthdate or p.deathdate == p.g_deathdate or force:
+        if p.birthdate == p.g_birthdate or p.baptismdate == p.g_baptismdate or p.deathdate == p.g_deathdate or force:
             pass
         else:
-            print(_("Gramps   person birth/death: %s / %s")%(p.birthdate,p.deathdate))
-            print(_("Geneanet person birth/death: %s / %s")%(p.g_birthdate,p.g_deathdate))
+            print(_("Gramps   person birth/baptism/death: %s / %s")%(p.birthdate,p.baptismdate,p.deathdate))
+            print(_("Geneanet person birth/baptism/death: %s / %s")%(p.g_birthdate,p.g_baptismdate,p.g_deathdate))
             if not GUIMODE:
                 db.close()
                 sys.exit(_("Do not continue without force"))
@@ -1782,7 +1864,7 @@ def geneanet_to_gramps(p, level, gid, url):
     # Copy from Geneanet into Gramps and commit
     p.to_gramps()
     if GUIMODE:
-        progress.set_header(_("Adding Gramps Person %s %s (%s | %s)")%(p.firstname,p.lastname,p.birthdate,p.deathdate))
+        progress.set_header(_("Adding Gramps Person %s %s (%s | %s | %s)")%(p.firstname,p.lastname,p.birthdate,p.baptismdate, p.deathdate))
         progress.step()
     return(p)
 
