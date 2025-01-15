@@ -1331,6 +1331,9 @@ class GPerson(GBase):
                                     pref = a.xpath('attribute::href')[0]
                                 except:
                                     pref = ""
+                                # only consider first valid link instead of overwriting with eg "seigneur de XYZ" or "propriétaire à XYZ":
+                                if pname and pref:
+                                    break
 
                         if verbosity >= 1:
                            print(_("Parent name: %s (%s)")%(pname,ROOTURL+pref))
