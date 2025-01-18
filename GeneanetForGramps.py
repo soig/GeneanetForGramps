@@ -1151,9 +1151,10 @@ class GPerson(GBase):
                 except:
                     self.g_sex = 'U'
                 try:
-                    name = tree.xpath('//div[@id="person-title"]//a/text()')
+                    name = tree.xpath('//span[@class="gw-individual-info-name-firstname"]//div/text()')
                     self.g_firstname = str(name[0]).title()
-                    self.g_lastname = str(name[1]).title()
+                    name = tree.xpath('//span[@class="gw-individual-info-name-lastname"]//div/text()')
+                    self.g_lastname = str(name[0]).title()
                 except:
                     self.g_firstname = ""
                     self.g_lastname = ""
