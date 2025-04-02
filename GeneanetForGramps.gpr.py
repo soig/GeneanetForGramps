@@ -13,6 +13,8 @@
 #
 # $Id: $
 
+from gramps.version import major_version
+
 #------------------------------------------------------------------------
 #------------------------------------------------------------------------
 
@@ -23,7 +25,7 @@ register(TOOL,
     #name_accell  = _("Geneanet for Gramps"),
     description =  _("Extension to import data from Geneanet into Gramps."),
     version = '1.0.0',
-    gramps_target_version = '5.2',
+    gramps_target_version = major_version,
     status = STABLE,
     fname = 'GeneanetForGramps.py',
     authors = ['Bruno Cornec'],
