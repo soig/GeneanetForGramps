@@ -1146,8 +1146,10 @@ class GPerson(GBase):
                     sex = tree.xpath('//div[@id="person-title"]//img/attribute::alt')
                     self.g_sex = sex[0]
                     # Seems we have a french codification on the site
-                    if sex[0] == 'H':
+                    if sex[0][0] == 'H':
                         self.g_sex = 'M'
+                    elif sex[0][0] == 'F':
+                        self.g_sex = 'F'
                 except:
                     self.g_sex = 'U'
                 try:
